@@ -1,0 +1,479 @@
+/* ==========================================================================
+   Project Pulse — Dashboard Styles
+   Owner: Designer
+   Scope: visual system, layout, cards, status/priority variants, a11y.
+   ========================================================================== */
+
+/* ---------- Design tokens ---------- */
+:root {
+  /* Color — surface */
+  --color-bg: #eef2f8;
+  --color-bg-accent: #e3eaf6;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f7f9fc;
+  --color-border: #e2e6ef;
+  --color-border-strong: #cfd6e4;
+
+  /* Color — text */
+  --color-text: #101828;
+  --color-text-muted: #4b5565;
+  --color-text-subtle: #6b7280;
+  --color-text-inverse: #ffffff;
+
+  /* Color — brand */
+  --color-brand: #2f4bd8;
+  --color-brand-strong: #1f36a8;
+
+  /* Status palette (AA-contrast pairings) */
+  --status-active-bg: #d1f4e0;
+  --status-active-fg: #0f5132;
+  --status-active-border: #7bd3a5;
+
+  --status-at-risk-bg: #fff1cc;
+  --status-at-risk-fg: #7a4a00;
+  --status-at-risk-border: #f2c94c;
+
+  --status-blocked-bg: #fdd8d8;
+  --status-blocked-fg: #8a1c1c;
+  --status-blocked-border: #f28b8b;
+
+  --status-complete-bg: #d9e6ff;
+  --status-complete-fg: #123a86;
+  --status-complete-border: #93b4f0;
+
+  --status-planning-bg: #e3e7ee;
+  --status-planning-fg: #35405a;
+  --status-planning-border: #b7bfd0;
+
+  /* Priority accents */
+  --priority-high: #d64545;
+  --priority-medium: #e0a41b;
+  --priority-low: #94a3b8;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 14px rgba(16, 24, 40, 0.08);
+  --shadow-lg: 0 12px 28px rgba(16, 24, 40, 0.14);
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Motion */
+  --transition-fast: 140ms ease;
+  --transition-med: 220ms ease;
+}
+
+/* ---------- Reset-ish base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--color-text);
+  background: var(--color-bg);
+  background-image:
+    radial-gradient(1200px 500px at 10% -10%, rgba(47, 75, 216, 0.10), transparent 60%),
+    radial-gradient(900px 400px at 100% 0%, rgba(15, 81, 50, 0.06), transparent 60%),
+    linear-gradient(180deg, var(--color-bg-accent) 0%, var(--color-bg) 40%);
+  background-attachment: fixed;
+}
+
+h1, h2, h3, p, ul {
+  margin: 0;
+}
+
+a {
+  color: var(--color-brand);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- Page header ---------- */
+header {
+  padding: var(--space-7) var(--space-6) var(--space-5);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+header h1 {
+  font-size: clamp(1.75rem, 2.4vw + 1rem, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+header h1::before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand);
+  box-shadow: 0 0 0 4px rgba(47, 75, 216, 0.18);
+}
+
+header p {
+  margin-top: var(--space-2);
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-6) var(--space-7);
+}
+
+/* ---------- Dashboard container ---------- */
+.dashboard {
+  position: relative;
+  padding: var(--space-5) 0 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.project-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-5) 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-5);
+}
+
+/* ---------- Project card ---------- */
+.project-card {
+  --priority-accent: var(--color-border-strong);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  padding-left: calc(var(--space-5) + 4px);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 6px solid var(--priority-accent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-med),
+    border-color var(--transition-fast);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-border-strong);
+}
+
+.project-card:focus-within {
+  box-shadow: var(--shadow-lg);
+}
+
+.project-card__name {
+  font-size: 1.2rem;
+  font-weight: 650;
+  line-height: 1.35;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+
+.project-card__owner {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.project-card__owner::before {
+  content: "👤";
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.project-card__summary {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+
+.project-card__activity {
+  margin-top: auto;
+  font-size: 0.85rem;
+  color: var(--color-text-subtle);
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--color-border);
+  line-height: 1.5;
+}
+
+.project-card__activity::before {
+  content: "Recent activity — ";
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* Row of badges (status + priority) — cards can wrap these in a flex row */
+.project-card__status,
+.project-card__priority {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+/* Give status + priority a shared inline row without depending on markup */
+.project-card__status {
+  align-self: flex-start;
+}
+
+.project-card__priority {
+  align-self: flex-start;
+  background: #f1f5f9;
+  color: #334155;
+  border-color: #e2e8f0;
+}
+
+.project-card__priority::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--priority-accent);
+}
+
+/* ---------- Status variants ---------- */
+.project-card--status-active .project-card__status {
+  background: var(--status-active-bg);
+  color: var(--status-active-fg);
+  border-color: var(--status-active-border);
+}
+.project-card--status-at-risk .project-card__status {
+  background: var(--status-at-risk-bg);
+  color: var(--status-at-risk-fg);
+  border-color: var(--status-at-risk-border);
+}
+.project-card--status-blocked .project-card__status {
+  background: var(--status-blocked-bg);
+  color: var(--status-blocked-fg);
+  border-color: var(--status-blocked-border);
+}
+.project-card--status-complete .project-card__status {
+  background: var(--status-complete-bg);
+  color: var(--status-complete-fg);
+  border-color: var(--status-complete-border);
+}
+.project-card--status-planning .project-card__status {
+  background: var(--status-planning-bg);
+  color: var(--status-planning-fg);
+  border-color: var(--status-planning-border);
+}
+
+/* ---------- Priority variants (left accent + pill dot color) ---------- */
+.project-card--priority-high {
+  --priority-accent: var(--priority-high);
+}
+.project-card--priority-high .project-card__priority {
+  background: #fdecec;
+  color: #8a1c1c;
+  border-color: #f4b8b8;
+}
+
+.project-card--priority-medium {
+  --priority-accent: var(--priority-medium);
+}
+.project-card--priority-medium .project-card__priority {
+  background: #fdf3d3;
+  color: #7a4a00;
+  border-color: #f2d98a;
+}
+
+.project-card--priority-low {
+  --priority-accent: var(--priority-low);
+}
+.project-card--priority-low .project-card__priority {
+  background: #eef2f7;
+  color: #334155;
+  border-color: #d7dde7;
+}
+
+/* ---------- Progress bar (optional) ---------- */
+.project-card__progress {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.project-card__progress::after {
+  content: "";
+  display: block;
+  margin-top: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background:
+    linear-gradient(var(--color-brand), var(--color-brand))
+      0 / var(--progress, 0%) 100% no-repeat,
+    #e5e9f2;
+}
+
+/* If <progress> element is used instead */
+progress.project-card__progress {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border: none;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background: #e5e9f2;
+}
+progress.project-card__progress::-webkit-progress-bar {
+  background: #e5e9f2;
+  border-radius: var(--radius-pill);
+}
+progress.project-card__progress::-webkit-progress-value {
+  background: var(--color-brand);
+  border-radius: var(--radius-pill);
+}
+progress.project-card__progress::-moz-progress-bar {
+  background: var(--color-brand);
+}
+
+/* ---------- Empty & error states ---------- */
+.dashboard__empty,
+.dashboard__error {
+  margin: var(--space-6) 0;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  font-size: 1rem;
+}
+
+.dashboard__empty {
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border-strong);
+  color: var(--color-text-muted);
+}
+
+.dashboard__empty::before {
+  content: "📭";
+  display: block;
+  font-size: 2rem;
+  margin-bottom: var(--space-2);
+}
+
+.dashboard__error {
+  background: #fff5f5;
+  border: 1px solid #f4b8b8;
+  color: #7a1a1a;
+  font-weight: 600;
+}
+
+.dashboard__error::before {
+  content: "⚠ ";
+  font-size: 1.1rem;
+}
+
+/* ---------- Responsive tuning ---------- */
+@media (max-width: 640px) {
+  header {
+    padding: var(--space-6) var(--space-4) var(--space-4);
+  }
+  main {
+    padding: 0 var(--space-4) var(--space-6);
+  }
+  .project-card {
+    padding: var(--space-4);
+    padding-left: calc(var(--space-4) + 4px);
+  }
+  .project-card__name {
+    font-size: 1.1rem;
+  }
+  body {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .project-list {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+
+/* ---------- Motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+  .project-card:hover {
+    transform: none;
+  }
+}
+
+/* ---------- Print (defensive) ---------- */
+@media print {
+  body {
+    background: #fff;
+  }
+  .project-card {
+    box-shadow: none;
+    border-color: #999;
+    break-inside: avoid;
+  }
+}

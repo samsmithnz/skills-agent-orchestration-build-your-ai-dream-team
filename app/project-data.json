@@ -1,0 +1,70 @@
+{
+  "projects": [
+    {
+      "id": "aurora-release-readiness",
+      "name": "Aurora Release Readiness",
+      "owner": "Mona Patel",
+      "status": "Active",
+      "recentActivity": "Completed regression pass for the contributor onboarding flow.",
+      "priority": "High",
+      "summary": "Coordinates launch criteria, documentation updates, and final quality checks for the next dashboard release.",
+      "progress": 78,
+      "updated": "2026-09-16"
+    },
+    {
+      "id": "northstar-accessibility-improvements",
+      "name": "Northstar Accessibility Improvements",
+      "owner": "Jordan Lee",
+      "status": "At Risk",
+      "recentActivity": "Keyboard navigation audit found two remaining focus order issues.",
+      "priority": "High",
+      "summary": "Improves WCAG alignment across shared templates, examples, and learning resources.",
+      "progress": 52,
+      "updated": "2026-09-15"
+    },
+    {
+      "id": "atlas-data-cleanup",
+      "name": "Atlas Data Cleanup",
+      "owner": "Sam Rivera",
+      "status": "Blocked",
+      "recentActivity": "Waiting on sample export approval before normalizing legacy project records.",
+      "priority": "Medium",
+      "summary": "Refreshes sample data sets so learners see realistic project health and ownership patterns.",
+      "progress": 31,
+      "updated": "2026-09-14"
+    },
+    {
+      "id": "signal-docs-refresh",
+      "name": "Signal Documentation Refresh",
+      "owner": "Priya Shah",
+      "status": "Complete",
+      "recentActivity": "Published updated quickstart notes and reviewed all screenshots.",
+      "priority": "Low",
+      "summary": "Keeps contributor-facing documentation current with the latest Project Pulse workflow.",
+      "progress": 100,
+      "updated": "2026-09-10"
+    },
+    {
+      "id": "evergreen-maintenance-planning",
+      "name": "Evergreen Maintenance Planning",
+      "owner": "Alex Chen",
+      "status": "Planning",
+      "recentActivity": "Drafted milestone map for dependency updates and browser support checks.",
+      "priority": "Medium",
+      "summary": "Defines routine maintenance work that keeps the static dashboard dependable over time.",
+      "progress": 18,
+      "updated": "2026-09-13"
+    },
+    {
+      "id": "helios-cross-functional-stakeholder-readiness-dashboard-expansion",
+      "name": "Helios Cross-Functional Stakeholder Readiness Dashboard Expansion",
+      "owner": "Taylor Morgan",
+      "status": "Active",
+      "recentActivity": "Collected feedback from design, curriculum, and engineering reviewers.",
+      "priority": "Low",
+      "summary": "Explores a broader dashboard view for long-running initiatives with many collaborators and review checkpoints.",
+      "progress": 64,
+      "updated": "2026-09-17"
+    }
+  ]
+}

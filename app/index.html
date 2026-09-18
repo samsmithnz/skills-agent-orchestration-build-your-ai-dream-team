@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Pulse</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__content">
+      <p class="site-header__eyebrow">Team dashboard</p>
+      <h1>Project Pulse</h1>
+      <p class="site-header__tagline">A clear view of project health, ownership, and momentum across Mona's contributor team.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="dashboard" aria-labelledby="dashboard-title">
+      <div class="dashboard__heading">
+        <h2 id="dashboard-title">Current project health</h2>
+        <p>Review active work, spot blockers, and keep priority conversations focused.</p>
+      </div>
+      <ul class="project-list" aria-live="polite"></ul>
+    </section>
+  </main>
+
+  <script type="module">
+    const dashboard = document.querySelector('.dashboard');
+    const projectList = document.querySelector('.project-list');
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function slugify(value) {
+      return String(value)
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '') || 'unknown';
+    }
+
+    function renderEmptyState() {
+      projectList.innerHTML = '';
+      dashboard.insertAdjacentHTML('beforeend', '<div class="dashboard__empty">No projects to show yet.</div>');
+    }
+
+    function renderError(error) {
+      projectList.innerHTML = '';
+      console.error('Could not load project data.', error);
+      dashboard.insertAdjacentHTML('beforeend', '<div class="dashboard__error" role="alert">Could not load project data.</div>');
+    }
+
+    function renderProject(project) {
+      const statusSlug = slugify(project.status);
+      const prioritySlug = slugify(project.priority);
+      const summary = project.summary
+        ? `<p class="project-card__summary">${escapeHtml(project.summary)}</p>`
+        : '';
+      const updated = project.updated
+        ? `<p class="project-card__updated">Updated ${escapeHtml(project.updated)}</p>`
+        : '';
+      const progressValue = Number.isInteger(project.progress)
+        ? Math.max(0, Math.min(100, project.progress))
+        : null;
+      const progress = progressValue !== null
+        ? `
+          <div class="project-card__progress" aria-label="Progress: ${progressValue} percent">
+            <span class="project-card__progress-label">Progress</span>
+            <progress class="project-card__progress-meter" max="100" value="${progressValue}">${progressValue}%</progress>
+            <span class="project-card__progress-value">${progressValue}%</span>
+          </div>
+        `
+        : '';
+
+      return `
+        <li class="project-card project-card--status-${statusSlug} project-card--priority-${prioritySlug}">
+          <div class="project-card__header">
+            <h2 class="project-card__name">${escapeHtml(project.name)}</h2>
+            <span class="project-card__status" aria-label="Status: ${escapeHtml(project.status)}">${escapeHtml(project.status)}</span>
+          </div>
+          ${summary}
+          <dl class="project-card__details">
+            <div class="project-card__detail">
+              <dt>Owner</dt>
+              <dd class="project-card__owner">${escapeHtml(project.owner)}</dd>
+            </div>
+            <div class="project-card__detail">
+              <dt>Recent activity</dt>
+              <dd class="project-card__activity">${escapeHtml(project.recentActivity)}</dd>
+            </div>
+            <div class="project-card__detail">
+              <dt>Priority</dt>
+              <dd><span class="project-card__priority" aria-label="Priority: ${escapeHtml(project.priority)}">${escapeHtml(project.priority)}</span></dd>
+            </div>
+          </dl>
+          ${progress}
+          ${updated}
+        </li>
+      `;
+    }
+
+    async function loadProjects() {
+      try {
+        const response = await fetch('./project-data.json');
+        if (!response.ok) {
+          throw new Error(`Project data request failed with ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (!Array.isArray(data.projects) || data.projects.length === 0) {
+          renderEmptyState();
+          return;
+        }
+
+        projectList.innerHTML = data.projects.map(renderProject).join('');
+      } catch (error) {
+        renderError(error);
+      }
+    }
+
+    loadProjects();
+  </script>
+</body>
+</html>
